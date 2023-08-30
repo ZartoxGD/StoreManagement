@@ -1,15 +1,19 @@
 using MySql.Data.MySqlClient;
 using SoteManagementLab.SQL;
-using SoteManagementLab.SQL.Querrys;
 using System.Linq.Expressions;
 
 namespace SoteManagementLab
 {
     internal static class Program
     {
+
+        public static string connectedUsername;
+        public static int connectedUserType;
+
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
+        /// 
         [STAThread]
         static void Main()
         {
