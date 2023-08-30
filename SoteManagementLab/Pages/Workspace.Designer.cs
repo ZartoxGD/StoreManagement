@@ -32,12 +32,16 @@
             adminPage = new TabPage();
             inventory = new TabPage();
             splitContainer1 = new SplitContainer();
+            _operationsGroupBox = new GroupBox();
+            _exportToCsvBtn = new Button();
             _inventoryDataGridView = new DataGridView();
             tabControl1.SuspendLayout();
             inventory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            _operationsGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)_inventoryDataGridView).BeginInit();
             SuspendLayout();
             // 
@@ -79,12 +83,38 @@
             splitContainer1.Location = new Point(3, 3);
             splitContainer1.Name = "splitContainer1";
             // 
+            // splitContainer1.Panel1
+            // 
+            splitContainer1.Panel1.Controls.Add(_operationsGroupBox);
+            // 
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(_inventoryDataGridView);
             splitContainer1.Size = new Size(786, 416);
             splitContainer1.SplitterDistance = 262;
             splitContainer1.TabIndex = 0;
+            // 
+            // _operationsGroupBox
+            // 
+            _operationsGroupBox.Controls.Add(_exportToCsvBtn);
+            _operationsGroupBox.Dock = DockStyle.Fill;
+            _operationsGroupBox.Location = new Point(0, 0);
+            _operationsGroupBox.Name = "_operationsGroupBox";
+            _operationsGroupBox.Size = new Size(262, 416);
+            _operationsGroupBox.TabIndex = 0;
+            _operationsGroupBox.TabStop = false;
+            _operationsGroupBox.Text = "Operations";
+            // 
+            // _exportToCsvBtn
+            // 
+            _exportToCsvBtn.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            _exportToCsvBtn.Location = new Point(181, 387);
+            _exportToCsvBtn.Name = "_exportToCsvBtn";
+            _exportToCsvBtn.Size = new Size(75, 23);
+            _exportToCsvBtn.TabIndex = 0;
+            _exportToCsvBtn.Text = "Export CSV";
+            _exportToCsvBtn.UseVisualStyleBackColor = true;
+            _exportToCsvBtn.Click += ExportToCsvBtn_Click;
             // 
             // _inventoryDataGridView
             // 
@@ -107,9 +137,11 @@
             Load += Workspace_Load;
             tabControl1.ResumeLayout(false);
             inventory.ResumeLayout(false);
+            splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            _operationsGroupBox.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)_inventoryDataGridView).EndInit();
             ResumeLayout(false);
         }
@@ -120,5 +152,7 @@
         private TabPage inventory;
         private SplitContainer splitContainer1;
         private DataGridView _inventoryDataGridView;
+        private Button _exportToCsvBtn;
+        private GroupBox _operationsGroupBox;
     }
 }
