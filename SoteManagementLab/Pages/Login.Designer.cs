@@ -1,6 +1,6 @@
 ﻿namespace SoteManagementLab
 {
-    partial class Login
+    partial class Login : Form
     {
         /// <summary>
         ///  Required designer variable.
@@ -35,6 +35,7 @@
             label3 = new Label();
             _passwordTextBox = new TextBox();
             _loginButton = new Button();
+            button1 = new Button();
             SuspendLayout();
             // 
             // label1
@@ -62,6 +63,7 @@
             // _usernameTextBox
             // 
             _usernameTextBox.Location = new Point(60, 149);
+            _usernameTextBox.MaxLength = 50;
             _usernameTextBox.Name = "_usernameTextBox";
             _usernameTextBox.Size = new Size(213, 23);
             _usernameTextBox.TabIndex = 2;
@@ -91,9 +93,11 @@
             // _passwordTextBox
             // 
             _passwordTextBox.Location = new Point(60, 209);
+            _passwordTextBox.MaxLength = 50;
             _passwordTextBox.Name = "_passwordTextBox";
             _passwordTextBox.Size = new Size(213, 23);
             _passwordTextBox.TabIndex = 4;
+            _passwordTextBox.UseSystemPasswordChar = true;
             // 
             // _loginButton
             // 
@@ -107,11 +111,24 @@
             _loginButton.UseVisualStyleBackColor = false;
             _loginButton.Click += _loginButton_Click;
             // 
+            // button1
+            // 
+            button1.BackColor = Color.WhiteSmoke;
+            button1.Font = new Font("Arial", 8.25F, FontStyle.Italic, GraphicsUnit.Point);
+            button1.Location = new Point(279, 209);
+            button1.Name = "button1";
+            button1.Size = new Size(35, 23);
+            button1.TabIndex = 7;
+            button1.Text = "S/H";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
+            // 
             // Login
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(328, 450);
+            Controls.Add(button1);
             Controls.Add(_loginButton);
             Controls.Add(label3);
             Controls.Add(_passwordTextBox);
@@ -134,5 +151,6 @@
         private Label label3;
         private TextBox _passwordTextBox;
         private Button _loginButton;
+        private Button button1;
     }
 }
