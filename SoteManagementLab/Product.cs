@@ -27,6 +27,11 @@ namespace SoteManagementLab
             this.stock = stock;
         }
 
+        public override string ToString()
+        {
+            return $"[{Id}:{ServiceName}] {Name} (€: {Price} | Promo %: {PromoPercent} | Tax %: {TaxPercent} | Stock: {Stock})";
+        }
+
         public int Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public int Stock { get => stock; set => stock = value; }

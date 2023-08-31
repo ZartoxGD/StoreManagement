@@ -1,4 +1,6 @@
-﻿using OfficeOpenXml;
+﻿using MySql.Data.MySqlClient;
+using OfficeOpenXml;
+using SoteManagementLab.SQL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +15,9 @@ namespace SoteManagementLab.Pages
 {
     public partial class Workspace : Form
     {
+
+        //TODO: Gérer l'évenement delete lorsqu'on sélectionne une ligne dans le data grid view et qu'on appuie sur delete
+        //Demander une vérification si l'utilisateur veut supprimer une liste
 
         private string connectedUsername;
         private int connectedUserType;
@@ -40,31 +45,133 @@ namespace SoteManagementLab.Pages
 
             inventoryObj = new Inventory(_inventoryDataGridView);
 
-            _inventoryDataGridView.CellDoubleClick += _inventoryDataGridView_CellDoubleClick;
             _inventoryDataGridView.CellBeginEdit += _inventoryDataGridView_CellBeginEdit;
             _inventoryDataGridView.CellEndEdit += _inventoryDataGridView_CellEndEdit;
+            _inventoryDataGridView.DataError += _inventoryDataGridView_DataError;
+            _inventoryDataGridView.UserDeletingRow += _inventoryDataGridView_UserDeletingRow;
+        }
+
+        private void _inventoryDataGridView_UserDeletingRow(object? sender, DataGridViewRowCancelEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this row?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.No)
+            {
+                e.Cancel = true; // Annule la suppression de la ligne
+            }
+            else
+            {
+                int productId = Convert.ToInt32(e.Row.Cells[0].Value);
+                string query = $"DELETE FROM product WHERE id={productId};";
+                MySqlConnection c = SqlConnection.Connect();
+
+                using (MySqlCommand command = new MySqlCommand(query, c))
+                {
+                    command.ExecuteNonQuery();
+                }
+
+                c.Close();
+                //inventoryObj.DeleteProductById(productId);
+            }
+        }
+
+        private void _inventoryDataGridView_DataError(object? sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false;
+            MessageBox.Show("Can't have an empty cell", "Wrong operation", MessageBoxButtons.OK);
+            _inventoryDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = cellOldValue;
+            _inventoryDataGridView.CurrentCell = null;
         }
 
         private void _inventoryDataGridView_CellEndEdit(object? sender, DataGridViewCellEventArgs e)
         {
             DataGridViewCell cell = _inventoryDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            object cellNewValue = cell.Value;
-            MessageBox.Show($"{cellOldValue} : {cellNewValue}");
+            string cellNewValue = "";
+
+            if (cell.Value != null)
+            {
+                cellNewValue = cell.Value.ToString();
+            }
+            else
+            {
+                MessageBox.Show("Can't have an empty cell", "Wrong operation", MessageBoxButtons.OK);
+                cell.Value = cellOldValue;
+                _inventoryDataGridView.CurrentCell = null;
+                return;
+            }
+
+            int productId = (int)Convert.ToInt32(_inventoryDataGridView.Rows[e.RowIndex].Cells[0].Value);
+
+            MySqlConnection c = SqlConnection.Connect();
+
+            string query = GetRightModificationQuery(e.ColumnIndex, productId, cellNewValue);
+
+            using (MySqlCommand command = new MySqlCommand(query, c))
+            {
+                command.ExecuteNonQuery();
+            }
+
+            c.Close();
+        }
+
+        private string GetRightModificationQuery(int columnIndex, int productId, string newValue)
+        {
+            if(columnIndex == 1)
+                return $"UPDATE product SET name='{newValue}' WHERE id={productId}";
+
+            if(columnIndex == 2)
+                return $"UPDATE product SET stock='{newValue}' WHERE id={productId}";
+            
+            if(columnIndex == 3)
+                return $"UPDATE product SET price='{newValue}' WHERE id={productId}";
+            
+            if(columnIndex == 4)
+                return $"UPDATE product SET promo_percent='{newValue}' WHERE id={productId}";
+            
+            if(columnIndex == 5)
+                return $"UPDATE product SET tax_percent='{newValue}' WHERE id={productId}";
+
+            if (columnIndex == 6) 
+            {
+                int serviceId = GetServiceIdByServiceName(newValue);
+                return $"UPDATE product SET service_id={serviceId} WHERE id={productId}";
+            }
+                
+            return "";
+        }
+
+        private int GetServiceIdByServiceName(string name)
+        {//TODO: tester la fonction en cas de mauvaise entrée (urement erreur) Creer dans la bd une valeur par défaut et l'assigner dans ce cas
+            MySqlConnection c = SqlConnection.Connect();
+
+            string query = $"SELECT service_id FROM service WHERE name='{name}';";
+            int toReturn = 0;
+            using (MySqlCommand command = new MySqlCommand(query, c))
+            {
+
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (!reader.IsDBNull(0))
+                    {
+                        toReturn = reader.GetInt32(0);
+                    }
+                }
+            }
+            c.Close();
+            return toReturn;
         }
 
         private void _inventoryDataGridView_CellBeginEdit(object? sender, DataGridViewCellCancelEventArgs e)
         {
-            DataGridViewCell cell = _inventoryDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
-            cellOldValue = cell.Value;
-        }
-
-        private void _inventoryDataGridView_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
-        {
-            if(e.ColumnIndex == 0) // 0 -> ID column's index
+            if (e.ColumnIndex == 0) // 0 -> ID column's index
             {
                 MessageBox.Show("You cannot modify the ID of the product", "Wrong operation", MessageBoxButtons.OK);
                 _inventoryDataGridView.CurrentCell = null;
+                return;
             }
+
+            DataGridViewCell cell = _inventoryDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            cellOldValue = cell.Value;
         }
 
         private void ExportToCsvBtn_Click(object sender, EventArgs e)
