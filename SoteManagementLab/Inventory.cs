@@ -22,6 +22,21 @@ namespace SoteManagementLab
             LoadDataFromDB();
         }
 
+        public Product GetProductByID(int id)
+        {
+            foreach (Product product in products)
+            {
+                if (product.Id == id)
+                    return product;
+            }
+            return null;
+        }
+
+        public void DeleteProductById(int id)
+        {
+            products.Remove(GetProductByID(id));
+        }
+
         private void LoadDataFromDB()
         {
             MySqlConnection c = SqlConnection.Connect();
@@ -110,11 +125,6 @@ namespace SoteManagementLab
                 package.Save();
                 MessageBox.Show($"File successfully exported to CSV as '{filename}'", "Export to CSV", MessageBoxButtons.OK);
             }
-        }
-
-        public void ModifyExistingProduct(int product_id)
-        {
-
         }
     }
 }
