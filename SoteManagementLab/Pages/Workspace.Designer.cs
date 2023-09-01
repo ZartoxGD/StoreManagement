@@ -33,6 +33,8 @@
             inventory = new TabPage();
             splitContainer1 = new SplitContainer();
             _operationsGroupBox = new GroupBox();
+            _sortComboBox = new ComboBox();
+            label1 = new Label();
             _exportToCsvBtn = new Button();
             _inventoryDataGridView = new DataGridView();
             tabControl1.SuspendLayout();
@@ -96,6 +98,8 @@
             // 
             // _operationsGroupBox
             // 
+            _operationsGroupBox.Controls.Add(_sortComboBox);
+            _operationsGroupBox.Controls.Add(label1);
             _operationsGroupBox.Controls.Add(_exportToCsvBtn);
             _operationsGroupBox.Dock = DockStyle.Fill;
             _operationsGroupBox.Location = new Point(0, 0);
@@ -104,6 +108,26 @@
             _operationsGroupBox.TabIndex = 0;
             _operationsGroupBox.TabStop = false;
             _operationsGroupBox.Text = "Operations";
+            // 
+            // _sortComboBox
+            // 
+            _sortComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            _sortComboBox.FormattingEnabled = true;
+            _sortComboBox.Location = new Point(67, 16);
+            _sortComboBox.Name = "_sortComboBox";
+            _sortComboBox.Size = new Size(121, 23);
+            _sortComboBox.TabIndex = 2;
+            _sortComboBox.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(6, 19);
+            label1.Name = "label1";
+            label1.Size = new Size(50, 15);
+            label1.TabIndex = 1;
+            label1.Text = "Sort by: ";
+            label1.Click += label1_Click;
             // 
             // _exportToCsvBtn
             // 
@@ -142,6 +166,7 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             _operationsGroupBox.ResumeLayout(false);
+            _operationsGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)_inventoryDataGridView).EndInit();
             ResumeLayout(false);
         }
@@ -154,5 +179,7 @@
         private DataGridView _inventoryDataGridView;
         private Button _exportToCsvBtn;
         private GroupBox _operationsGroupBox;
+        private Label label1;
+        private ComboBox _sortComboBox;
     }
 }
