@@ -32,6 +32,94 @@ namespace SoteManagementLab
             return null;
         }
 
+        #region SORTING
+
+        public void SortBindingSourceByIdDesc()
+        {
+            products.Sort((p1, p2) => p2.Id.CompareTo(p1.Id));
+            bindingSource.ResetBindings(false);
+        }
+        
+        public void SortBindingSourceByIdAsc()
+        {
+            products.Sort((p1, p2) => p1.Id.CompareTo(p2.Id));
+            bindingSource.ResetBindings(false);
+        }
+        
+        public void SortBindingSourceByStockDesc()
+        {
+            products.Sort((p1, p2) => p2.Stock.CompareTo(p1.Stock));
+            bindingSource.ResetBindings(false);
+        }
+        
+        public void SortBindingSourceByStockAsc()
+        {
+            products.Sort((p1, p2) => p1.Stock.CompareTo(p2.Stock));
+            bindingSource.ResetBindings(false);
+        }
+        
+        public void SortBindingSourceByPriceAsc()
+        {
+            products.Sort((p1, p2) => p1.Price.CompareTo(p2.Price));
+            bindingSource.ResetBindings(false);
+        }
+        
+        public void SortBindingSourceByPriceDesc()
+        {
+            products.Sort((p1, p2) => p2.Price.CompareTo(p1.Price));
+            bindingSource.ResetBindings(false);
+        }
+        
+        public void SortBindingSourceByPromoPercentDesc()
+        {
+            products.Sort((p1, p2) => p2.PromoPercent.CompareTo(p1.PromoPercent));
+            bindingSource.ResetBindings(false);
+        }
+
+        public void SortBindingSourceByPromoPercentAsc()
+        {
+            products.Sort((p1, p2) => p1.PromoPercent.CompareTo(p2.PromoPercent));
+            bindingSource.ResetBindings(false);
+        }
+        
+        public void SortBindingSourceByTaxPercentAsc()
+        {
+            products.Sort((p1, p2) => p1.TaxPercent.CompareTo(p2.TaxPercent));
+            bindingSource.ResetBindings(false);
+        }
+        
+        public void SortBindingSourceByTaxPercentDesc()
+        {
+            products.Sort((p1, p2) => p2.TaxPercent.CompareTo(p1.TaxPercent));
+            bindingSource.ResetBindings(false);
+        }
+
+        public void SortBindingSourceByNameAsc()
+        {
+            products.Sort((p1, p2) => string.Compare(p1.Name, p2.Name));
+            bindingSource.ResetBindings(false);
+        }
+        
+        public void SortBindingSourceByServiceNameAsc()
+        {
+            products.Sort((p1, p2) => string.Compare(p1.ServiceName, p2.ServiceName));
+            bindingSource.ResetBindings(false);
+        }
+
+        public void SortBindingSourceByServiceNameDesc()
+        {
+            products.Sort((p1, p2) => string.Compare(p2.ServiceName, p1.ServiceName));
+            bindingSource.ResetBindings(false);
+        }
+
+        public void SortBindingSourceByNameDesc()
+        {
+            products.Sort((p1, p2) => string.Compare(p2.Name, p1.Name));
+            bindingSource.ResetBindings(false);
+        }
+
+        #endregion
+
         public void DeleteProductById(int id)
         {
             products.Remove(GetProductByID(id));
